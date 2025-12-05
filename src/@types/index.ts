@@ -1,4 +1,5 @@
-import { UserRole } from "generated/prisma/enums";
+
+import { UserRole } from "generated/prisma";
 import { UserForClient } from "src/modules/user/dto/user.dto";
 
 export interface EnvVariables {
