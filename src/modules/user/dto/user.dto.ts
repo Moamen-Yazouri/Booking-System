@@ -4,4 +4,4 @@ export type CreateUserDTO = Pick<User, "email" | "password" | "name">;
 
 export type UpdateUserDTO = Partial<CreateUserDTO>;
 
-export type UserResponseDTO = Omit<User, 'password'>;
+export type UserForClient = Omit<User, 'password'>;
