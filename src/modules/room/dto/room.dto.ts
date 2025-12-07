@@ -35,3 +35,5 @@ export type RoomDetailDTO = Prisma.RoomGetPayload<{
         bookings: true,
     }
 }>;
+
+export type UpdateRoomDTO = Partial<CreateRoomDTO> 

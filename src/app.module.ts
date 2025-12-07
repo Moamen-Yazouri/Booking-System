@@ -7,6 +7,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './modules/auth/auth.guard';
 import { RoomModule } from './modules/room/room.module';
+import { BookingModule } from './modules/booking/booking.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RoomModule } from './modules/room/room.module';
     UserModule,
     AuthModule,
     RoomModule,
+    BookingModule,
   ],
   controllers: [AppController],
   providers: [

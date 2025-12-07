@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateRoomDto } from './dto/update-room.dto';
 import { IPaginationQuery, IPaginationResult } from 'src/@types/pagination';
 import { DatabaseService } from '../database/database.service';
-import { AllRoomsDTO, AvailableRoomsDTO, CreateRoomDTO } from './dto/room.dto';
+import { AllRoomsDTO, AvailableRoomsDTO, CreateRoomDTO, UpdateRoomDTO } from './dto/room.dto';
 import { IAvailabelQuery } from './types';
 import { BookingStatus, Prisma, RoomStatus } from 'generated/prisma';
+import { UserForClient } from '../user/dto/user.dto';
+import { buildWhere } from './room.util';
 
 @Injectable()
 export class RoomService {
@@ -112,12 +113,23 @@ export class RoomService {
     })
   }
 
-  update(id: number, updateRoomDto: UpdateRoomDto) {
-    return `This action updates a #${id} room`;
+  update(user: UserForClient, roomId: number, data: UpdateRoomDTO) {
+    const where = buildWhere(user.role, roomId, user.id)
+    return this.prismaClient.room.update({
+      data,
+      where,
+      include: {
+        bookings: true
+      }
+
+    })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} room`;
+  remove(user: UserForClient, id: number) {
+    const where = buildWhere(user.role, id, user.id);
+    return this.prismaClient.room.delete({
+      where,
+    });
   }
 
   private generateWhereForAvailable(query: Omit<IAvailabelQuery, 'limit' | 'page'>) {
