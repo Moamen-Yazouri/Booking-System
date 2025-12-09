@@ -1,98 +1,354 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🏨 Booking System API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A robust, production-ready booking management system built with NestJS, featuring role-based access control, real-time availability checking, and comprehensive booking management capabilities.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## ✨ Features
 
-## Description
+- **🔐 JWT Authentication** - Secure token-based authentication with refresh token support
+- **👥 Role-Based Access Control** - Three user roles (ADMIN, OWNER, GUEST) with granular permissions
+- **🏠 Room Management** - Complete CRUD operations for room inventory
+- **📅 Smart Booking System** - Prevent overlapping bookings with intelligent conflict detection
+- **🔍 Advanced Filtering** - Search available rooms by date range, price, and capacity
+- **📄 Pagination Support** - Efficient data retrieval with configurable page sizes
+- **📚 Auto-Generated API Docs** - Interactive Swagger documentation
+- **✅ Schema Validation** - Request validation using Zod schemas
+- **🌱 Database Seeding** - Populate database with realistic test data using Faker
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🛠️ Tech Stack
 
-## Project setup
+- **Framework**: [NestJS](https://nestjs.com/) - Progressive Node.js framework
+- **ORM**: [Prisma](https://www.prisma.io/) - Next-generation ORM for type-safe database access
+- **Database**: [MySQL](https://www.mysql.com/) - Relational database
+- **Validation**: [Zod](https://zod.dev/) - TypeScript-first schema validation
+- **Authentication**: [JWT](https://jwt.io/) - JSON Web Tokens for secure authentication
+- **Password Hashing**: [Argon2](https://github.com/ranisalt/node-argon2) - Secure password hashing
+- **Documentation**: [Swagger](https://swagger.io/) - OpenAPI specification
+- **Testing Data**: [Faker](https://fakerjs.dev/) - Generate realistic test data
 
-```bash
-$ npm install
-```
+## 📋 Prerequisites
 
-## Compile and run the project
+- Node.js >= 18.x
+- MySQL >= 8.x
+- npm or yarn
 
-```bash
-# development
-$ npm run start
+## 🚀 Getting Started
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
+### 1. Clone the Repository
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+git clone <repository-url>
+cd booking-system-api
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 2. Install Dependencies
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 3. Environment Configuration
 
-## Resources
+Create a `.env` file in the root directory:
 
-Check out a few resources that may come in handy when working with NestJS:
+```env
+# Database
+DATABASE_URL="mysql://username:password@localhost:3306/booking_system"
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# JWT Configuration
+JWT_SECRET="your-super-secret-jwt-key-change-this-in-production"
+JWT_EXPIRES_IN="1d"
 
-## Support
+# Application
+PORT=3000
+NODE_ENV="development"
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### 4. Database Setup
 
-## Stay in touch
+Run Prisma migrations to create the database schema:
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+npx prisma migrate dev
+```
 
-## License
+Generate Prisma Client:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```bash
+npx prisma generate
+```
+
+### 5. Seed the Database (Optional)
+
+Populate the database with test data:
+
+```bash
+npm run seed
+```
+
+This will create:
+- 1 Admin user
+- 2 Owner users
+- 5 Guest users
+- 10 Rooms with various capacities and prices
+- Sample bookings
+
+**Default Test Credentials:**
+```
+Admin:
+  Email: admin@booking.com
+  Password: Admin123!
+
+Owner:
+  Email: owner1@booking.com
+  Password: Owner123!
+
+Guest:
+  Email: guest1@booking.com
+  Password: Guest123!
+```
+
+### 6. Run the Application
+
+**Development mode:**
+```bash
+npm run start:dev
+```
+
+**Production mode:**
+```bash
+npm run build
+npm run start:prod
+```
+
+The API will be available at `http://localhost:3000`
+
+## 📖 API Documentation
+
+Interactive API documentation is available via Swagger UI:
+
+```
+http://localhost:3000/api
+```
+
+## 🔗 API Routes
+
+### Authentication Routes
+
+| Method | Endpoint | Access | Description |
+|--------|----------|--------|-------------|
+| POST | `/auth/sign-up` | Public | Register a new user |
+| POST | `/auth/sign-in` | Public | Login and receive JWT token |
+
+### User Routes
+
+| Method | Endpoint | Access | Description |
+|--------|----------|--------|-------------|
+| GET | `/user` | Admin | List all users |
+| GET | `/user/:id` | Admin | Get user by ID |
+| POST | `/user` | Admin | Create a new user |
+| PATCH | `/user/:id` | Admin | Update user details |
+| DELETE | `/user/:id` | Admin | Delete a user |
+
+### Room Routes
+
+| Method | Endpoint | Access | Description |
+|--------|----------|--------|-------------|
+| GET | `/room` | All | List all rooms (paginated) |
+| GET | `/room/available` | All | Search available rooms by date range, price, capacity |
+| GET | `/room/:id` | All | Get room details |
+| POST | `/room` | Admin, Owner | Create a new room |
+| PATCH | `/room/:id` | Admin, Owner | Update room details |
+| DELETE | `/room/:id` | Admin, Owner | Delete a room |
+
+### Booking Routes
+
+| Method | Endpoint | Access | Description |
+|--------|----------|--------|-------------|
+| GET | `/booking` | All | List bookings (filtered by role) |
+| GET | `/booking/:id` | All | Get booking details |
+| POST | `/booking` | Guest | Create a new booking |
+| PATCH | `/booking/:id` | Admin, Owner | Confirm a booking |
+| DELETE | `/booking/:id` | Guest, Admin, Owner | Cancel a booking |
+
+## 🏗️ Project Structure
+
+```
+booking-system-api/
+├── prisma/
+│   ├── migrations/          # Database migrations
+│   ├── schema.prisma        # Prisma schema definition
+│   └── seed.ts              # Database seeding script
+├── src/
+│   ├── auth/                # Authentication module
+│   │   ├── decorators/      # Custom decorators (@IsPublic, @Roles, @User)
+│   │   ├── guards/          # Auth guards (JWT, Roles)
+│   │   └── strategies/      # Passport strategies
+│   ├── booking/             # Booking module
+│   │   ├── dto/             # Data transfer objects
+│   │   └── booking.service.ts
+│   ├── room/                # Room module
+│   │   ├── dto/             # Data transfer objects
+│   │   └── room.service.ts
+│   ├── user/                # User module
+│   │   ├── dto/             # Data transfer objects
+│   │   └── user.service.ts
+│   ├── common/              # Shared utilities
+│   │   ├── pipes/           # Custom pipes (ZodValidationPipe)
+│   │   └── filters/         # Exception filters
+│   ├── prisma/              # Prisma service
+│   │   └── prisma.service.ts
+│   ├── app.module.ts        # Root module
+│   └── main.ts              # Application entry point
+├── .env                     # Environment variables
+├── .env.example             # Environment template
+├── nest-cli.json            # NestJS CLI configuration
+├── package.json             # Dependencies and scripts
+├── tsconfig.json            # TypeScript configuration
+└── README.md                # This file
+```
+
+## 🔑 Authentication & Authorization
+
+### JWT Token
+
+After successful login, you'll receive a JWT token:
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+Include this token in subsequent requests:
+
+```
+Authorization: Bearer <your-token>
+```
+
+### User Roles
+
+- **ADMIN**: Full system access, user management
+- **OWNER**: Room management, booking confirmation
+- **GUEST**: Create and cancel own bookings
+
+## 🎯 Key Features Explained
+
+### Overlap Prevention
+
+The booking system automatically prevents double-bookings by checking for conflicts:
+- Validates date ranges before creating bookings
+- Returns clear error messages when conflicts are detected
+- Ensures data integrity at the database level
+
+### Available Rooms Filter
+
+Search for rooms based on multiple criteria:
+```
+GET /room/available?checkIn=2024-01-01&checkOut=2024-01-05&minPrice=50&maxPrice=200&capacity=2
+```
+
+### Pagination
+
+List endpoints support pagination:
+```
+GET /room?page=1&limit=10
+```
+
+## 📝 Example Requests
+
+### Sign Up
+
+```bash
+curl -X POST http://localhost:3000/auth/sign-up \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "SecurePass123!",
+    "name": "John Doe",
+    "role": "GUEST"
+  }'
+```
+
+### Create a Booking
+
+```bash
+curl -X POST http://localhost:3000/booking \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <token>" \
+  -d '{
+    "roomId": 1,
+    "checkIn": "2024-06-01",
+    "checkOut": "2024-06-05"
+  }'
+```
+
+### Search Available Rooms
+
+```bash
+curl -X GET "http://localhost:3000/room/available?checkIn=2024-06-01&checkOut=2024-06-05&capacity=2"
+```
+
+## 🧪 Testing
+
+```bash
+# Unit tests
+npm run test
+
+# E2E tests
+npm run test:e2e
+
+# Test coverage
+npm run test:cov
+```
+
+## 🔧 Available Scripts
+
+```bash
+npm run start          # Start the application
+npm run start:dev      # Start in development mode with hot-reload
+npm run start:prod     # Start in production mode
+npm run build          # Build the application
+npm run format         # Format code with Prettier
+npm run lint           # Lint code with ESLint
+npm run seed           # Seed the database
+npm run test           # Run unit tests
+npm run test:e2e       # Run end-to-end tests
+```
+
+## 🐳 Docker Support (Optional)
+
+```bash
+# Build and run with Docker Compose
+docker-compose up -d
+
+# Stop containers
+docker-compose down
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👤 Author
+
+Your Name - [@yourhandle](https://twitter.com/yourhandle)
+
+## 🙏 Acknowledgments
+
+- NestJS team for the amazing framework
+- Prisma team for the excellent ORM
+- All contributors who help improve this project
+
+---
+
+**Built with ❤️ using NestJS**
