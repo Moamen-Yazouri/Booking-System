@@ -10,17 +10,20 @@ import { AuthResponseDTO, SignInDTO } from './dto/auth.dto';
 export class AuthService {
   constructor(
     private userService: UserService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
   async signIn(userCreds: SignInDTO): Promise<AuthResponseDTO> {
     //get user by email
     const user = await this.userService.findUserByEmail(userCreds.email);
-    
+
     if (!user) {
       throw new UnauthorizedException('Invalid Credentials!');
     }
     //verify password
-    const isPasswordValid = await this.verifyPassword(user.password, userCreds.password);
+    const isPasswordValid = await this.verifyPassword(
+      user.password,
+      userCreds.password,
+    );
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid Credentials!');
     }
@@ -30,7 +33,7 @@ export class AuthService {
       role: user.role,
       email: user.email,
       name: user.name,
-    })
+    });
     //return user with token
     return {
       user: userForClient(user),
@@ -68,9 +71,7 @@ export class AuthService {
     return argon.verify(hash, password);
   }
 
-  private generateToken(
-    userForToken: TUserForToken ,
-  ) {
+  private generateToken(userForToken: TUserForToken) {
     const token = this.jwtService.sign<IJWTPayload>({
       sub: userForToken.id,
       role: userForToken.role,
@@ -79,5 +80,4 @@ export class AuthService {
     });
     return token;
   }
-
 }

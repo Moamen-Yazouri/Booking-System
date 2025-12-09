@@ -25,8 +25,7 @@ import { BookingModule } from './modules/booking/booking.module';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
-    }
+    },
   ],
-
 })
 export class AppModule {}

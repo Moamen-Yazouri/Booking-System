@@ -1,15 +1,15 @@
 export interface IPaginationQuery {
-    page: number;
-    limit: number;
+  page: number;
+  limit: number;
 }
 export interface IMetaPagination {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number,
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }
 
 export interface IPaginationResult<T> {
-    data: T[];
-    meta: IMetaPagination;
+  data: T[];
+  meta: IMetaPagination;
 }

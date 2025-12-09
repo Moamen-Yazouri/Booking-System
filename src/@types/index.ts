@@ -1,16 +1,18 @@
-
-import { UserRole } from "generated/prisma";
-import { UserForClient } from "src/modules/user/dto/user.dto";
+import { UserRole } from 'generated/prisma';
+import { UserForClient } from 'src/modules/user/dto/user.dto';
 
 export interface EnvVariables {
-    JWT_SECRET: string;
+  JWT_SECRET: string;
 }
 
 export interface IJWTPayload {
-    sub: number;
-    role: UserRole;
-    email: string;
-    name: string;
+  sub: number;
+  role: UserRole;
+  email: string;
+  name: string;
 }
 
-export type TUserForToken = Pick<UserForClient, "id" | "role" | "email" | "name">
+export type TUserForToken = Pick<
+  UserForClient,
+  'id' | 'role' | 'email' | 'name'
+>;

@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { IPaginationQuery, IPaginationResult } from 'src/@types/pagination';
 import { DatabaseService } from '../database/database.service';
-import { AllRoomsDTO, AvailableRoomsDTO, CreateRoomDTO, UpdateRoomDTO } from './dto/room.dto';
+import {
+  AllRoomsDTO,
+  AvailableRoomsDTO,
+  CreateRoomDTO,
+  UpdateRoomDTO,
+} from './dto/room.dto';
 import { IAvailabelQuery } from './types';
 import { BookingStatus, Prisma, RoomStatus } from 'generated/prisma';
 import { UserForClient } from '../user/dto/user.dto';
@@ -14,28 +19,30 @@ export class RoomService {
     return this.prismaClient.room.create({
       data: {
         ...createRoomDto,
-        ownerId
+        ownerId,
       },
-    })
+    });
   }
   //For the admin
-  async findAll(query: IPaginationQuery): Promise<IPaginationResult<AllRoomsDTO>> {
+  async findAll(
+    query: IPaginationQuery,
+  ): Promise<IPaginationResult<AllRoomsDTO>> {
     const allRooms = await this.prismaClient.$transaction(async (tx) => {
       const pagination = this.prismaClient.createPaginationForPrisma(query);
       const roomsPaginated = await tx.room.findMany({
-        include:{
+        include: {
           owner: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
-                }
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
           },
           _count: {
-                select: {
-                    bookings: true
-                }
-          }
+            select: {
+              bookings: true,
+            },
+          },
         },
         ...pagination,
       });
@@ -50,19 +57,21 @@ export class RoomService {
 
       return {
         data: roomsPaginated,
-        meta: paginationMetadata
-      }
-    })
-    return allRooms
+        meta: paginationMetadata,
+      };
+    });
+    return allRooms;
   }
 
-  async findAvailableWithFilter (query: IAvailabelQuery): Promise<IPaginationResult<AvailableRoomsDTO>> {
-    const availableRooms = await this.prismaClient.$transaction(async(tx) => {
-      const {limit, page, ...filtering } = query
+  async findAvailableWithFilter(
+    query: IAvailabelQuery,
+  ): Promise<IPaginationResult<AvailableRoomsDTO>> {
+    const availableRooms = await this.prismaClient.$transaction(async (tx) => {
+      const { limit, page, ...filtering } = query;
       const pagination = this.prismaClient.createPaginationForPrisma({
         limit,
-        page
-      }); 
+        page,
+      });
 
       const where = this.generateWhereForAvailable(filtering);
 
@@ -75,7 +84,7 @@ export class RoomService {
           price: true,
           capacity: true,
           status: true,
-        }
+        },
       });
 
       const total = await tx.room.count();
@@ -85,11 +94,11 @@ export class RoomService {
         page,
         total,
       );
-      
+
       return {
         data: availableRoomsPaginated,
-        meta
-      }
+        meta,
+      };
     });
 
     return availableRooms;
@@ -98,31 +107,30 @@ export class RoomService {
   findOne(id: number) {
     return this.prismaClient.room.findUnique({
       where: {
-        id
+        id,
       },
       include: {
         bookings: true,
         owner: {
           select: {
-              id: true,
-              name: true,
-              email: true,
-          }
+            id: true,
+            name: true,
+            email: true,
+          },
         },
-      }
-    })
+      },
+    });
   }
 
   update(user: UserForClient, roomId: number, data: UpdateRoomDTO) {
-    const where = buildWhere(user.role, roomId, user.id)
+    const where = buildWhere(user.role, roomId, user.id);
     return this.prismaClient.room.update({
       data,
       where,
       include: {
-        bookings: true
-      }
-
-    })
+        bookings: true,
+      },
+    });
   }
 
   remove(user: UserForClient, id: number) {
@@ -132,10 +140,12 @@ export class RoomService {
     });
   }
 
-  private generateWhereForAvailable(query: Omit<IAvailabelQuery, 'limit' | 'page'>) {
-    const where: Prisma.RoomWhereInput = {status: RoomStatus.ACTIVE}
+  private generateWhereForAvailable(
+    query: Omit<IAvailabelQuery, 'limit' | 'page'>,
+  ) {
+    const where: Prisma.RoomWhereInput = { status: RoomStatus.ACTIVE };
 
-    if(query.interval) {
+    if (query.interval) {
       where.bookings = {
         none: {
           status: BookingStatus.CANCELLED,
@@ -145,22 +155,22 @@ export class RoomService {
               { checkIn: { gte: query.interval.checkOut } },
             ],
           },
-        }
-      }
+        },
+      };
     }
 
-    if(query.capacityRange) {
+    if (query.capacityRange) {
       where.capacity = {
         gte: query.capacityRange.minCapacity ?? undefined,
         lte: query.capacityRange.maxCapacity ?? undefined,
-      }
+      };
     }
 
-    if(query.priceRange) {
+    if (query.priceRange) {
       where.price = {
         gte: query.priceRange.minPrice ?? undefined,
         lte: query.priceRange.maxPrice ?? undefined,
-      }
+      };
     }
 
     return where;

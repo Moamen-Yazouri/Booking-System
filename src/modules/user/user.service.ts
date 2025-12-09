@@ -2,21 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { CreateUserDTO, UpdateUserDTO } from './dto/user.dto';
 
-
 @Injectable()
 export class UserService {
   constructor(private prismaClient: DatabaseService) {}
   create(data: CreateUserDTO) {
-      return this.prismaClient.user.create({
-        data
-      });
+    return this.prismaClient.user.create({
+      data,
+    });
   }
 
   findUserByEmail(email: string) {
     return this.prismaClient.user.findUnique({
       where: {
-        email
-      }
+        email,
+      },
     });
   }
   findAll() {
@@ -26,17 +25,17 @@ export class UserService {
   findById(id: number) {
     return this.prismaClient.user.findUniqueOrThrow({
       where: {
-        id
-      }
+        id,
+      },
     });
   }
 
   update(id: number, updateUserDto: UpdateUserDTO) {
     return this.prismaClient.user.update({
       where: {
-        id
+        id,
       },
-      data: updateUserDto
+      data: updateUserDto,
     });
   }
 
