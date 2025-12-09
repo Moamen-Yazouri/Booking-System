@@ -16,7 +16,7 @@ import { UserModule } from '../user/user.module';
         secret: configService.get('JWT_SECRET'),
       }),
       inject: [ConfigService],
-    })
-  ]
+    }),
+  ],
 })
 export class AuthModule {}
