@@ -10,12 +10,13 @@ import { UserForClient } from '../user/dto/user.dto';
 export class BookingService {
   constructor(private prismaClient: DatabaseService) {}
   create(data: CreateBookingDTO, guestId: number) {
+    
     const { roomId, checkIn, checkOut } = data;
-
+    
     const newRoom = this.prismaClient.$transaction(async (tx) => {
       const booingOverlap = await tx.booking.findFirst({
         where: {
-          roomId,
+          roomId: roomId,
           checkIn: {
             lte: checkOut,
           },
@@ -31,8 +32,11 @@ export class BookingService {
 
       return await tx.booking.create({
         data: {
-          guestId,
-          ...data
+          guestId: guestId,
+          roomId: data.roomId,
+          checkIn: data.checkIn,
+          checkOut: data.checkOut,
+
         },
       });
     });

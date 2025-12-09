@@ -1,22 +1,24 @@
-import { IPaginationQuery } from 'src/@types/pagination';
 
-export interface IAvailabelQuery extends IPaginationQuery {
+
+export interface IAvailabelQuery {
+  page: number;
+  limit: number;
   interval?: TInterval;
   priceRange?: TPriceRange;
   capacityRange?: TCapacityRange;
 }
 
-type TInterval = {
+export type TInterval = {
   checkIn: string;
   checkOut: string;
 };
 
-type TPriceRange = {
+export type TPriceRange = {
   minPrice?: number;
   maxPrice?: number;
 };
 
-type TCapacityRange = {
+export type TCapacityRange = {
   minCapacity?: number;
   maxCapacity?: number;
 };

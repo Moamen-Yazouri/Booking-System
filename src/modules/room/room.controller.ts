@@ -11,7 +11,7 @@ import {
 import { RoomService } from './room.service';
 import { ZodValidationPipe } from 'src/pipes/zodValidation.pipe';
 import type { IPaginationQuery } from 'src/@types/pagination';
-import { PaginationSchema } from 'src/validation/normalQuery.validation';
+import { querySchema } from 'src/validation/normalQuery.validation';
 import type { CreateRoomDTO, UpdateRoomDTO } from './dto/room.dto';
 import { User } from 'src/decorators/user.dec';
 import type { UserForClient } from '../user/dto/user.dto';
@@ -20,6 +20,8 @@ import {
   updateroomValidationSchema,
 } from './validation/room.validation';
 import { Roles } from 'src/decorators/roles';
+import type { IAvailabelQuery } from './types';
+import { availableQuerySchema } from './validation/query.pagination';
 
 @Controller('room')
 export class RoomController {
@@ -38,14 +40,27 @@ export class RoomController {
   @Roles(['ADMIN'])
   @Get()
   findAll(
-    @Query(new ZodValidationPipe(PaginationSchema)) query: IPaginationQuery,
+    @Query(new ZodValidationPipe(querySchema)) query: IPaginationQuery,
   ) {
+    console.log(query)
     return this.roomService.findAll(query);
   }
 
+  @Roles(['GUEST', 'ADMIN'])
+  @Get('/available')
+  findAvailable(
+    @Query(new ZodValidationPipe(availableQuerySchema)) query: IAvailabelQuery
+  ) {
+    console.log(query)
+    return this.roomService.findAvailableWithFilter(query);
+  }
+
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.roomService.findOne(Number(id));
+  findOne(
+    @Param('id') id: string,
+    @User() user: UserForClient,
+  ) {
+    return this.roomService.findOne(Number(id), user);
   }
 
   @Patch(':id')

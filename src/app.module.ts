@@ -10,9 +10,12 @@ import { RoomModule } from './modules/room/room.module';
 import { BookingModule } from './modules/booking/booking.module';
 import { RolesGuard } from './modules/auth/roles.guard';
 import { UnifierInterceptor } from './interceptor/response.interceptor';
+import { DatabaseModule } from './modules/database/database.module';
+
 
 @Module({
   imports: [
+    DatabaseModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

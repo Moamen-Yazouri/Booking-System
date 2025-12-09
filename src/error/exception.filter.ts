@@ -1,8 +1,8 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from "@nestjs/common";
 import type { Response, Request } from "express";
-import { Prisma } from "generated/prisma";
 import { ZodError } from "zod";
 import { buildApiErrorResponse, buildZodValidationErrorResponse } from "./utils/responseBuilder";
+import { Prisma } from "generated/prisma";
 
 @Catch(HttpException) 
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -29,6 +29,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
 )
 export class PrismaExceptionFilter implements ExceptionFilter {
     catch(exception: Prisma.PrismaClientKnownRequestError | Prisma.PrismaClientValidationError, host: ArgumentsHost) {
+
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
         const request = ctx.getRequest<Request>();
@@ -118,6 +119,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
 @Catch(ZodError)
 export class ZodExceptionFilter implements ExceptionFilter {
   catch(exception: ZodError, host: ArgumentsHost) {
+    
     const ctx = host.switchToHttp();
     const res = ctx.getResponse<Response>();
     const req = ctx.getRequest<Request>();
@@ -135,9 +137,10 @@ export class ZodExceptionFilter implements ExceptionFilter {
 
 @Catch()
 export class UncaughtExceptionFilter implements ExceptionFilter {
+    
     catch(exception: unknown, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
-
+        
         const res = ctx.getResponse<Response>();
 
         const req = ctx.getRequest<Request>();

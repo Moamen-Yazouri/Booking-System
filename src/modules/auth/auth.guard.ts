@@ -1,6 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
+  Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -11,6 +12,7 @@ import { IJWTPayload } from 'src/@types';
 import { UserService } from '../user/user.service';
 import { userForClient } from 'src/utils/userForClient';
 
+@Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
@@ -19,8 +21,9 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    console.log("HIIIII")
     const isPublic = this.reflector.get(IsPublic, context.getHandler());
-
+    
     if (isPublic) {
       return true;
     }
@@ -28,14 +31,14 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<Request>();
     const authHeader = request.headers.authorization;
     const token = authHeader?.split(' ')[1];
-
+    console.log(token)
     if (!token) {
       throw new UnauthorizedException('No token provided');
     }
     try {
       const tokenPayload = this.jwtService.verify<IJWTPayload>(token);
       const user = await this.userService.findById(tokenPayload.sub);
-
+    
       request.user = {
         user: userForClient(user),
         token,

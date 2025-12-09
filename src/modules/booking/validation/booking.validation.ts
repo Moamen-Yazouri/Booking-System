@@ -2,9 +2,11 @@ import z from "zod";
 
 export const bookingValidationSchema = z.object({
   roomId: z
-    .string({
+    .coerce
+    .number({
       message: "Room id is required",
     })
+    .int()
     .min(1, "Room id is required"), 
 
   checkIn: z.coerce.date({

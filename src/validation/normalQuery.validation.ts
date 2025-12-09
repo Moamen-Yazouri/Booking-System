@@ -1,17 +1,7 @@
-import z from 'zod';
+import { IPaginationQuery } from "src/@types/pagination";
+import z, { ZodType } from "zod";
 
-export const PaginationSchema = z.object({
-  page: z
-    .string()
-    .optional()
-    .default('1')
-    .transform((val) => parseInt(val, 10))
-    .pipe(z.number().int().positive().min(1)),
-
-  limit: z
-    .string()
-    .optional()
-    .default('10')
-    .transform((val) => parseInt(val, 10))
-    .pipe(z.number().int().positive().min(1).max(100)),
-});
+export const querySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(10),
+}) satisfies ZodType<IPaginationQuery>;

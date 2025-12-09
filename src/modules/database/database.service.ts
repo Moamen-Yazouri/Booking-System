@@ -1,12 +1,9 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from 'generated/prisma/client';
+import { PrismaClient } from 'generated/prisma';
 import { IMetaPagination, IPaginationQuery } from 'src/@types/pagination';
 
 @Injectable()
-export class DatabaseService
-  extends PrismaClient
-  implements OnModuleInit, OnModuleDestroy
-{
+export class DatabaseService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   async onModuleInit() {
     await this.$connect();
   }
@@ -30,6 +27,7 @@ export class DatabaseService
     page: number,
     total: number,
   ): IMetaPagination {
+    
     return {
       total,
       page,

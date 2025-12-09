@@ -8,9 +8,10 @@ import {
   UpdateRoomDTO,
 } from './dto/room.dto';
 import { IAvailabelQuery } from './types';
-import { BookingStatus, Prisma, RoomStatus } from 'generated/prisma';
+
 import { UserForClient } from '../user/dto/user.dto';
 import { buildWhere } from './room.util';
+import { BookingStatus, Prisma, RoomStatus } from 'generated/prisma/client';
 
 @Injectable()
 export class RoomService {
@@ -27,6 +28,7 @@ export class RoomService {
   async findAll(
     query: IPaginationQuery,
   ): Promise<IPaginationResult<AllRoomsDTO>> {
+    
     const allRooms = await this.prismaClient.$transaction(async (tx) => {
       const pagination = this.prismaClient.createPaginationForPrisma(query);
       const roomsPaginated = await tx.room.findMany({
@@ -48,7 +50,7 @@ export class RoomService {
       });
 
       const total = await tx.room.count();
-
+      
       const paginationMetadata = this.prismaClient.createPaginationMetaData(
         query.limit,
         query.page,
@@ -69,8 +71,8 @@ export class RoomService {
     const availableRooms = await this.prismaClient.$transaction(async (tx) => {
       const { limit, page, ...filtering } = query;
       const pagination = this.prismaClient.createPaginationForPrisma({
-        limit,
-        page,
+        limit: limit || 10,
+        page: page || 1,
       });
 
       const where = this.generateWhereForAvailable(filtering);
@@ -87,10 +89,12 @@ export class RoomService {
         },
       });
 
-      const total = await tx.room.count();
-
+      const total = await tx.room.count({
+        where,
+      });
+      console.log(total)
       const meta = this.prismaClient.createPaginationMetaData(
-        limit,
+        limit ,
         page,
         total,
       );

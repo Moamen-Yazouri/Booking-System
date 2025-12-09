@@ -1,5 +1,5 @@
-import { Booking } from '@prisma/client';
-import { Prisma } from 'generated/prisma';
+
+import { Booking, Prisma } from 'generated/prisma';
 
 export type CreateBookingDTO = Pick<
   Booking,

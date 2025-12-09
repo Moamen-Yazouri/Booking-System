@@ -16,3 +16,8 @@ export type TUserForToken = Pick<
   UserForClient,
   'id' | 'role' | 'email' | 'name'
 >;
+
+export type UserInReq = {
+  user: UserForClient,
+  token: string,
+}
