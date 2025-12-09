@@ -104,11 +104,12 @@ export class RoomService {
     return availableRooms;
   }
 
-  findOne(id: number) {
+  findOne(id: number, user: UserForClient) {
+    const where = this.getWhereForFindOne(id, user)
+
+
     return this.prismaClient.room.findUnique({
-      where: {
-        id,
-      },
+      where,
       include: {
         bookings: true,
         owner: {
@@ -171,6 +172,16 @@ export class RoomService {
         gte: query.priceRange.minPrice ?? undefined,
         lte: query.priceRange.maxPrice ?? undefined,
       };
+    }
+
+    return where;
+  }
+
+  private getWhereForFindOne(id: number, user: UserForClient) {
+    const where: Prisma.RoomWhereUniqueInput = {id};
+
+    if(user.role === "OWNER") {
+      where.ownerId = user.id;
     }
 
     return where;

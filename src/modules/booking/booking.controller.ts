@@ -16,6 +16,7 @@ import { ZodValidationPipe } from 'src/pipes/zodValidation.pipe';
 import { PaginationSchema } from 'src/validation/normalQuery.validation';
 import type { IPaginationQuery } from 'src/@types/pagination';
 import { Roles } from 'src/decorators/roles';
+import { bookingValidationSchema } from './validation/booking.validation';
 
 @Controller('booking')
 export class BookingController {
@@ -24,7 +25,7 @@ export class BookingController {
 
   @Post()
   create(
-    @Body() createBookingDto: CreateBookingDTO,
+    @Body(new ZodValidationPipe(bookingValidationSchema)) createBookingDto: CreateBookingDTO,
     @User() user: UserForClient
   ) {
     return this.bookingService.create(createBookingDto, user.id);
@@ -37,7 +38,7 @@ export class BookingController {
   ) {
     return this.bookingService.findAll(query);
   }
-
+  
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.bookingService.findOne(+id);

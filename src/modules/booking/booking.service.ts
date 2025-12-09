@@ -2,9 +2,9 @@ import { BadRequestException, ConflictException, Injectable } from '@nestjs/comm
 import { AllBookingsResponseDTO, CreateBookingDTO } from './dto/booking.dto';
 import { DatabaseService } from '../database/database.service';
 import { IPaginationQuery, IPaginationResult } from 'src/@types/pagination';
-import { Booking } from 'generated/prisma';
+import { Booking, Prisma } from 'generated/prisma';
 import { UserForClient } from '../user/dto/user.dto';
-import { getCancelBookingWhere, getConfirmBookingWhere } from './booking.utils';
+
 
 @Injectable()
 export class BookingService {
@@ -79,7 +79,7 @@ export class BookingService {
 
   async confirmBooking(id: number, user: UserForClient): Promise<Booking> {
     const confirmedBooking = await this.prismaClient.$transaction(async (tx) =>{
-        const where = getConfirmBookingWhere(user, id);
+        const where = this.getConfirmBookingWhere(user, id);
         const booking = await tx.booking.findUniqueOrThrow({
           where
         });
@@ -107,7 +107,7 @@ export class BookingService {
 
   async cancleBooking(id: number, user: UserForClient): Promise<Booking> {
     const confirmedBooking = await this.prismaClient.$transaction(async (tx) =>{
-      const where = getCancelBookingWhere(user, id);
+      const where = this.getCancelBookingWhere(user, id);
     const booking = await tx.booking.findUniqueOrThrow({
       where,
     });
@@ -131,4 +131,43 @@ export class BookingService {
     
     return confirmedBooking;
   }
+
+
+  private getCancelBookingWhere(user: UserForClient, id: number): Prisma.BookingWhereUniqueInput {
+    const where: Prisma.BookingWhereUniqueInput = {id};
+  
+    if(user.role === "ADMIN") {
+      return where;
+    }
+  
+    if(user.role === "OWNER") {
+      where.room = {
+          ownerId: user.id
+      };
+    }
+  
+    if(user.role === "GUEST") {
+      where.guestId = user.id;
+    }
+  
+    return where;
+  }
+
+  getConfirmBookingWhere(user: UserForClient, id: number): Prisma.BookingWhereUniqueInput {
+    const where: Prisma.BookingWhereUniqueInput = {id};
+
+    if(user.role === "ADMIN") {
+      return where;
+    }
+
+    if(user.role === "OWNER") {
+      where.room = {
+          ownerId: user.id
+      };
+    }
+
+    return where;
+  }
 }
+
+
